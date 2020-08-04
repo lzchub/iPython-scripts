@@ -1,3 +1,9 @@
+"""
+    author by chuan
+    2020-08-04
+    实现数据库的连接，增删改查等操作
+"""
+
 import pymysql
 
 """
@@ -104,17 +110,38 @@ def update_sql(id,name,sex):
 """
     select操作
 """
-def select_sql():
-    pass
+def select_sql(id):
+
+    # 1.创建连接对象
+    conn = pymysql.connect(host='192.168.100.100',
+                           port=3306,
+                           user='admin',
+                           password='admin',
+                           db='school',
+                           charset='utf8')
+
+    try:
+        # 获取游标对象
+        with conn.cursor() as cursor:
+            # 执行SQL得到结果
+            cursor.execute('select * from tb_student where stuid=%s', (id))
+            print(cursor.fetchall()) # fetchone fetchmany
+
+    except pymysql.MySQLError as error:
+        print(error)
+
+    finally:
+        # 关闭连接释放资源
+        conn.close()
 
 if __name__ == '__main__':
     # insert_sql('张无忌',1)
 
     # delete_sql(1014)
 
-    update_sql(1001,'金毛丝王',1)
+    # update_sql(1001,'金毛丝王',1)
 
-
+    select_sql(1001)
 
 
 
